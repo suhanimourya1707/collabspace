@@ -5,10 +5,11 @@ from app.models.task import Task
 from app.models.document import Document
 from app.models.invite_code import InviteCode
 from app.models.workspace_member import WorkspaceMember
-
 from fastapi import FastAPI
+from app.api.auth import router as auth_router
 
 app = FastAPI()
+app.include_router(auth_router, prefix="/auth", tags=["auth"])
 Base.metadata.create_all(bind=engine)
 
 @app.get("/")
