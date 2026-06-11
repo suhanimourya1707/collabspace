@@ -8,7 +8,16 @@ from app.models.workspace_member import WorkspaceMember
 from fastapi import FastAPI
 from app.api.auth import router as auth_router
 from app.api.workspace import router as workspace_router
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
 app.include_router(workspace_router, prefix="/workspaces", tags=["workspaces"])
 Base.metadata.create_all(bind=engine)
