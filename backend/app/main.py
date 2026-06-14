@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from app.api.auth import router as auth_router
 from app.api.workspace import router as workspace_router
 from fastapi.middleware.cors import CORSMiddleware
+from app.api.task import router as task_router
 app = FastAPI()
 
 app.add_middleware(
@@ -20,6 +21,7 @@ app.add_middleware(
 )
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
 app.include_router(workspace_router, prefix="/workspaces", tags=["workspaces"])
+app.include_router(task_router, prefix="/tasks", tags=["tasks"])
 Base.metadata.create_all(bind=engine)
 
 @app.get("/")
