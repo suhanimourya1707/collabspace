@@ -23,7 +23,7 @@ app.add_middleware(
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
 app.include_router(workspace_router, prefix="/workspaces", tags=["workspaces"])
 app.include_router(task_router, prefix="/tasks", tags=["tasks"])
-app.include_router(websocket_router, prefix="/ws", tags=["websocket"])
+app.include_router(websocket_router, prefix="", tags=["websocket"])
 Base.metadata.create_all(bind=engine)
 
 @app.get("/")
