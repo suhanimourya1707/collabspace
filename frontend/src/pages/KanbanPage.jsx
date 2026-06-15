@@ -1,17 +1,27 @@
 import { useState, useEffect } from "react";
 import api from "../api/axios";
-import useWebSocket from "../hooks/useWebSocket"
+import useWebSocket from "../hooks/useWebSocket";
 
 function KanbanPage() {
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const [tasks, setTasks] = useState([]);
-    useWebSocket(1, (message) => {
-    console.log("Real-time update:", message)
-    fetchTasks()
-  })
 
   useEffect(() => {
     fetchTasks();
   }, []);
+  const token = localStorage.getItem("token");
+  const username = localStorage.getItem("username") || "user";
+
+  useWebSocket(1, username, (message) => {
+    try {
+      const data = JSON.parse(message);
+      if (data.type === "users") {
+        setOnlineUsers(data.users);
+      }
+    } catch {
+      fetchTasks();
+    }
+  });
 
   const fetchTasks = async () => {
     const token = localStorage.getItem("token");
@@ -45,6 +55,17 @@ function KanbanPage() {
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold text-blue-600 mb-6">Kanban Board</h1>
+      <div className="mb-4 flex gap-2">
+        <span className="text-sm text-gray-600">Online:</span>
+        {onlineUsers.map((user, index) => (
+          <span
+            key={index}
+            className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full"
+          >
+            🟢 {user}
+          </span>
+        ))}
+      </div>
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-gray-100 p-4 rounded-lg">
           <h2 className="font-bold text-lg mb-3">TODO</h2>
