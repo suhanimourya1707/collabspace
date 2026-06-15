@@ -1,8 +1,13 @@
 import { useState, useEffect } from "react";
 import api from "../api/axios";
+import useWebSocket from "../hooks/useWebSocket"
 
 function KanbanPage() {
   const [tasks, setTasks] = useState([]);
+    useWebSocket(1, (message) => {
+    console.log("Real-time update:", message)
+    fetchTasks()
+  })
 
   useEffect(() => {
     fetchTasks();
