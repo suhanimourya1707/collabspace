@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import DashboardPage from "../pages/DashboardPage";
 import RegisterPage from "../pages/RegisterPage";
 import KanbanPage from "../pages/KanbanPage";
+import DocumentsPage from "../pages/DocumentsPage";
 function AppRouter() {
   return (
     <BrowserRouter>
@@ -15,7 +16,7 @@ function AppRouter() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/kanban" element={<KanbanPage />} />
-        
+        <Route path="/documents" element={<DocumentsPage />} />
       </Routes>
     </BrowserRouter>
   );
