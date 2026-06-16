@@ -19,7 +19,7 @@ TECH STACK: Frontend:React with JSXViteTailwind CSS
 Backend:Python FastAPISQLAlchemyPostgreSQLWebSockets
 Authentication:JWT auth
 PROJECT STRUCTURE:
-Frontend: frontend/ ├── src/ │ ├── api/ │ ├── components/ │ ├── pages/ │ ├── hooks/ │ ├── context/ │ ├── router/ │ ├── services/ │ └── utils/
+Frontend: frontend/ ├──src/  │ ├── api/ │ ├── components/ │ ├── pages/ │ ├── hooks/ │ ├── context/ │ ├── router/ │ ├── services/ │ └── utils/
 Backend: backend/ ├── app/ │ ├── api/ │ ├── models/ │ ├── schemas/ │ ├── services/ │ ├── websocket/ │ ├── database/ │ ├── core/ │ └── main.py
 FEATURES:user authenticationworkspaceskanban tasksshared notesreal-time updatesonline users
 CODING RULES:clean folder structurereusable componentsbeginner-friendly explanationsproduction-level architecturescalable practicesproper naming conventions
@@ -689,7 +689,6 @@ Think. Answer. 🧱You said: in pages with name NavBar.in page
 Navbar is not a page.
 It's a reusable piece that appears on multiple pages.
 Which folder is for reusable pieces? 🧱You said: in mainin mainJun 2Claude responded: Not main.Not main. Look at your folder structure:
-src/
 ├── pages/        → full screens
 ├── components/   → reusable pieces ✅
 └── router/       → navigation
@@ -743,7 +742,6 @@ What do you see? 🧱You said: CollabSpaceCollabSpace
 Welcome to CollabSpaceJun 2Claude responded: Let's go!Let's go! 🎉
 
 What you built so far:
-src/
 ├── pages/
 │   ├── HomePage.jsx ✅
 │   └── LoginPage.jsx ✅
