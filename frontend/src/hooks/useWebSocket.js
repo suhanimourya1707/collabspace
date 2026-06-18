@@ -4,7 +4,7 @@ function useWebSocket(workspaceId, username, onMessage)  {
   const ws = useRef(null)
 
   useEffect(() => {
-    ws.current = new WebSocket(`ws://127.0.0.1:8000/ws/${workspaceId}/${username}`)
+    ws.current = new WebSocket(`wss://collabspace-production-90c8.up.railway.app/ws/${workspaceId}/${username}`)
 
     ws.current.onmessage = (event) => {
       onMessage(event.data)

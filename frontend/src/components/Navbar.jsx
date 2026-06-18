@@ -10,6 +10,12 @@ function Navbar() {
         <Link to="/login" className="hover:underline">
           Login
         </Link>
+        <Link to="/dashboard" className="hover:underline">
+          Dashboard
+        </Link>
+        <Link to="/kanban" className="hover:underline">
+          Kanban
+        </Link>
       </div>
     </nav>
   );
