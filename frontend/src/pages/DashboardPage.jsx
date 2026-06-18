@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import api from "../api/axios";
+import { Link } from "react-router-dom";
 function DashboardPage() {
   const [workspaces, setWorkspaces] = useState([]);
   const [name, setName] = useState("");
@@ -67,10 +68,12 @@ function DashboardPage() {
         </button>
       </div>
       {workspaces.map((workspace) => (
-        <div key={workspace.id} className="bg-white p-4 rounded-lg shadow mb-4">
-          <h2 className="text-xl font-semibold">{workspace.name}</h2>
-          <p className="text-gray-600">{workspace.description}</p>
-        </div>
+        <Link key={workspace.id} to={`/kanban/${workspace.id}`}>
+          <div className="bg-white p-4 rounded-lg shadow mb-4 hover:shadow-md cursor-pointer">
+            <h2 className="text-xl font-semibold">{workspace.name}</h2>
+            <p className="text-gray-600">{workspace.description}</p>
+          </div>
+        </Link>
       ))}
     </div>
   );

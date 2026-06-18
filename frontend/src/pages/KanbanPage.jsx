@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../api/axios";
 import useWebSocket from "../hooks/useWebSocket";
+import { useParams } from "react-router-dom";
 
 function KanbanPage() {
   const [onlineUsers, setOnlineUsers] = useState([]);
@@ -11,8 +12,9 @@ function KanbanPage() {
   }, []);
   const token = localStorage.getItem("token");
   const username = localStorage.getItem("username") || "user";
+  const { workspaceId } = useParams();
 
-  useWebSocket(1, username, (message) => {
+  useWebSocket(workspaceId, username, (message) => {
     try {
       const data = JSON.parse(message);
       if (data.type === "users") {
@@ -26,7 +28,7 @@ function KanbanPage() {
   const fetchTasks = async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await api.get("/tasks/1", {
+      const response = await api.get(`/tasks/${workspaceId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTasks(response.data);

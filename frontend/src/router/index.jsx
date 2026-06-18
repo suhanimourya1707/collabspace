@@ -15,7 +15,7 @@ function AppRouter() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/kanban" element={<KanbanPage />} />
+        <Route path="/kanban/:workspaceId" element={<KanbanPage />} />
         <Route path="/documents" element={<DocumentsPage />} />
       </Routes>
     </BrowserRouter>
