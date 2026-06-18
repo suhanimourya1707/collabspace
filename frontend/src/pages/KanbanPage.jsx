@@ -6,6 +6,8 @@ import { useParams } from "react-router-dom";
 function KanbanPage() {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [tasks, setTasks] = useState([]);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     fetchTasks();
@@ -49,6 +51,28 @@ function KanbanPage() {
       alert("Failed to move task");
     }
   };
+  const createTask = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      await api.post(
+        "/tasks/",
+        {
+          title,
+          description,
+          status: "todo",
+          deadline: "2026-12-31T00:00:00",
+          workspace_id: workspaceId,
+          assigned_to: 1,
+        },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      setTitle("");
+      setDescription("");
+      fetchTasks();
+    } catch (error) {
+      alert("Failed to create task");
+    }
+  };
 
   const todo = tasks.filter((t) => t.status === "todo");
   const inProgress = tasks.filter((t) => t.status === "in_progress");
@@ -67,6 +91,26 @@ function KanbanPage() {
             🟢 {user}
           </span>
         ))}
+      </div>
+      <div className="bg-white p-4 rounded-lg shadow mb-4">
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Task title"
+          className="border p-2 rounded mr-2"
+        />
+        <input
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Description"
+          className="border p-2 rounded mr-2"
+        />
+        <button
+          onClick={createTask}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Add Task
+        </button>
       </div>
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-gray-100 p-4 rounded-lg">
