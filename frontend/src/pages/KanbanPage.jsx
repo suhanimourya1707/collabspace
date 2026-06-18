@@ -89,6 +89,12 @@ function KanbanPage() {
             <div key={task.id} className="bg-white p-3 rounded shadow mb-2">
               <p className="font-semibold">{task.title}</p>
               <p className="text-gray-500 text-sm">{task.description}</p>
+              <button
+                onClick={() => moveTask(task.id, "done")}
+                className="mt-2 text-xs bg-green-400 px-2 py-1 rounded hover:bg-green-500"
+              >
+                → Done
+              </button>
             </div>
           ))}
         </div>
