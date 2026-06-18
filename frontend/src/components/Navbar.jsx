@@ -6,7 +6,7 @@ function Navbar() {
       <Link to="/" className="text-xl font-bold text-blue-600">
         CollabSpace
       </Link>
-      <div className="flex gap-6 text-sm font-medium text-slate-600">
+      <div className="flex mr-6 text-sm font-medium text-slate-600">
         <Link to="/" className="hover:text-blue-600 transition-colors mr-6">
           Home
         </Link>
