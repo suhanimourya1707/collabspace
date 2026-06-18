@@ -12,11 +12,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.task import router as task_router
 from app.websocket.socket import router as websocket_router
 from app.api.document import router as document_router
+from app.api.invite import router as invite_router
+
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "https://collabspace-g3ii.vercel.app"],
+    allow_origins=[
+    "http://localhost:5173", 
+    "https://collabspace-g3ii.vercel.app",
+    "https://collabspace-six-theta.vercel.app"
+],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -27,6 +33,7 @@ app.include_router(task_router, prefix="/tasks", tags=["tasks"])
 app.include_router(task_router, prefix="/tasks", tags=["tasks"])
 app.include_router(document_router, prefix="/documents", tags=["documents"])
 app.include_router(websocket_router, prefix="", tags=["websocket"])
+app.include_router(invite_router, tags=["invite"])
 Base.metadata.create_all(bind=engine)
 
 @app.get("/")
