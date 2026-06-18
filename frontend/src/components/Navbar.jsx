@@ -1,17 +1,20 @@
 import { Link } from "react-router-dom";
+
 function Navbar() {
   return (
-    <nav className="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
-      <span className="text-xl font-bold">CollabSpace</span>
-      <div className="flex gap-4">
-        <Link to="/" className="hover:underline">
+    <nav className="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-10">
+      <Link to="/" className="text-xl font-bold text-blue-600">
+        CollabSpace
+      </Link>
+      <div className="flex gap-6 text-sm font-medium text-slate-600">
+        <Link to="/" className="hover:text-blue-600 transition-colors">
           Home
         </Link>
-        <Link to="/login" className="hover:underline">
-          Login
-        </Link>
-        <Link to="/dashboard" className="hover:underline">
+        <Link to="/dashboard" className="hover:text-blue-600 transition-colors">
           Dashboard
+        </Link>
+        <Link to="/login" className="hover:text-blue-600 transition-colors">
+          Login
         </Link>
       </div>
     </nav>
