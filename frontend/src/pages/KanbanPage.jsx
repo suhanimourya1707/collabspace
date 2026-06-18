@@ -81,6 +81,7 @@ function KanbanPage() {
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold text-blue-600 mb-6">Kanban Board</h1>
+      <p className="text-gray-500 mb-2">Workspace ID: {workspaceId}</p>
       <div className="mb-4 flex gap-2">
         <span className="text-sm text-gray-600">Online:</span>
         {onlineUsers.map((user, index) => (

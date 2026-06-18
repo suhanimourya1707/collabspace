@@ -13,9 +13,6 @@ function Navbar() {
         <Link to="/dashboard" className="hover:underline">
           Dashboard
         </Link>
-        <Link to="/kanban" className="hover:underline">
-          Kanban
-        </Link>
       </div>
     </nav>
   );
