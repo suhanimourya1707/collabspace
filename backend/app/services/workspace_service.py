@@ -6,9 +6,6 @@ from app.models.workspace_member import WorkspaceMember
 
 def get_user_workspaces(db: Session, user_id: int):
     owned = db.query(Workspace).filter(Workspace.owner_id == user_id).all()
-    member_workspace_ids = db.query(WorkspaceMember.workspace_id).filter(
-        WorkspaceMember.user_id == user_id
-    ).all()
     member_ids = [m.workspace_id for m in member_workspace_ids]
     member_workspaces = db.query(Workspace).filter(
         Workspace.id.in_(member_ids),
