@@ -2,6 +2,19 @@ from sqlalchemy.orm import Session
 from app.models.workspace import Workspace
 from app.models.workspace_member import WorkspaceMember
 from app.schemas.workspace import WorkspaceCreate
+from app.models.workspace_member import WorkspaceMember
+
+def get_user_workspaces(db: Session, user_id: int):
+    owned = db.query(Workspace).filter(Workspace.owner_id == user_id).all()
+    member_workspace_ids = db.query(WorkspaceMember.workspace_id).filter(
+        WorkspaceMember.user_id == user_id
+    ).all()
+    member_ids = [m.workspace_id for m in member_workspace_ids]
+    member_workspaces = db.query(Workspace).filter(
+        Workspace.id.in_(member_ids),
+        Workspace.owner_id != user_id
+    ).all()
+    return owned + member_workspaces
 
 def create_workspace(db: Session, data: WorkspaceCreate, owner_id: int):
     workspace = Workspace(
