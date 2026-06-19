@@ -18,11 +18,8 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-    "http://localhost:5173", 
-    "https://collabspace-g3ii.vercel.app",
-    "https://collabspace-six-theta.vercel.app"
-],
+    allow_origins=["http://localhost:5173"],
+    allow_origin_regex=r"https://collabspace-.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
