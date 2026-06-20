@@ -19,7 +19,10 @@ class GenerateResponse(BaseModel):
 
 @router.post("/generate-tasks", response_model=GenerateResponse)
 def generate(data: GenerateRequest, current_user: User = Depends(get_current_user)):
-    tasks = generate_tasks(data.prompt)
+    try:
+        tasks = generate_tasks(data.prompt)
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))
     if not tasks:
-        raise HTTPException(status_code=502, detail="AI failed to generate tasks, try again")
+        raise HTTPException(status_code=502, detail="AI returned no tasks, try a more detailed prompt")
     return {"tasks": tasks}

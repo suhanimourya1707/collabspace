@@ -26,8 +26,10 @@ function KanbanPage() {
         { headers: { Authorization: `Bearer ${token}` } },
       );
       setAiTasks(response.data.tasks.map((t) => ({ ...t, selected: true })));
-    } catch {
-      alert("AI task generation failed, try again");
+    } catch (err) {
+      alert(
+        err.response?.data?.detail || "AI task generation failed, try again",
+      );
     }
     setAiLoading(false);
   };
