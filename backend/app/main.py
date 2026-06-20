@@ -13,6 +13,7 @@ from app.api.task import router as task_router
 from app.websocket.socket import router as websocket_router
 from app.api.document import router as document_router
 from app.api.invite import router as invite_router
+from app.api.ai import router as ai_router
 
 app = FastAPI()
 
@@ -27,10 +28,10 @@ app.add_middleware(
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
 app.include_router(workspace_router, prefix="/workspaces", tags=["workspaces"])
 app.include_router(task_router, prefix="/tasks", tags=["tasks"])
-app.include_router(task_router, prefix="/tasks", tags=["tasks"])
 app.include_router(document_router, prefix="/documents", tags=["documents"])
 app.include_router(websocket_router, prefix="", tags=["websocket"])
 app.include_router(invite_router, tags=["invite"])
+app.include_router(ai_router, prefix="/ai", tags=["ai"])
 Base.metadata.create_all(bind=engine)
 
 @app.get("/")

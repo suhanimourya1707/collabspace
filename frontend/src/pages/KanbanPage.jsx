@@ -8,8 +8,64 @@ function KanbanPage() {
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [showAiModal, setShowAiModal] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [aiTasks, setAiTasks] = useState([]);
+  const [aiLoading, setAiLoading] = useState(false);
   const { workspaceId } = useParams();
   const username = localStorage.getItem("username") || "user";
+
+  const generateAiTasks = async () => {
+    if (!aiPrompt.trim()) return;
+    setAiLoading(true);
+    const token = localStorage.getItem("token");
+    try {
+      const response = await api.post(
+        "/ai/generate-tasks",
+        { prompt: aiPrompt },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      setAiTasks(response.data.tasks.map((t) => ({ ...t, selected: true })));
+    } catch {
+      alert("AI task generation failed, try again");
+    }
+    setAiLoading(false);
+  };
+
+  const toggleAiTask = (index) => {
+    setAiTasks((prev) =>
+      prev.map((t, i) => (i === index ? { ...t, selected: !t.selected } : t)),
+    );
+  };
+
+  const addSelectedAiTasks = async () => {
+    const token = localStorage.getItem("token");
+    const selected = aiTasks.filter((t) => t.selected);
+    try {
+      await Promise.all(
+        selected.map((t) =>
+          api.post(
+            "/tasks/",
+            {
+              title: t.title,
+              description: t.description,
+              status: "todo",
+              deadline: "2026-12-31T00:00:00",
+              workspace_id: workspaceId,
+              assigned_to: 1,
+            },
+            { headers: { Authorization: `Bearer ${token}` } },
+          ),
+        ),
+      );
+      setShowAiModal(false);
+      setAiTasks([]);
+      setAiPrompt("");
+      fetchTasks();
+    } catch {
+      alert("Failed to add tasks");
+    }
+  };
 
   useEffect(() => {
     fetchTasks();
@@ -148,7 +204,81 @@ function KanbanPage() {
           >
             + Add Task
           </button>
+          <button
+            onClick={() => setShowAiModal(true)}
+            className="bg-purple-600 text-white px-5 py-2.5 rounded-lg hover:bg-purple-700 font-medium whitespace-nowrap"
+          >
+            ✨ Generate Tasks (AI)
+          </button>
         </div>
+
+        {showAiModal && (
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-xl shadow-lg w-full max-w-lg p-6 max-h-[85vh] overflow-y-auto">
+              <h2 className="text-lg font-semibold text-slate-800 mb-3">
+                Generate Tasks with AI
+              </h2>
+              <textarea
+                value={aiPrompt}
+                onChange={(e) => setAiPrompt(e.target.value)}
+                placeholder="Paste your project goal or meeting notes..."
+                rows={4}
+                className="w-full border border-slate-300 p-2.5 rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
+              />
+              <button
+                onClick={generateAiTasks}
+                disabled={aiLoading}
+                className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 font-medium mb-4 disabled:opacity-50"
+              >
+                {aiLoading ? "Generating..." : "Generate"}
+              </button>
+
+              {aiTasks.length > 0 && (
+                <div className="space-y-2 mb-4">
+                  {aiTasks.map((t, i) => (
+                    <label
+                      key={i}
+                      className="flex items-start gap-2 border border-slate-200 rounded-lg p-3 cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={t.selected}
+                        onChange={() => toggleAiTask(i)}
+                        className="mt-1"
+                      />
+                      <div>
+                        <p className="font-medium text-slate-800">{t.title}</p>
+                        <p className="text-slate-500 text-sm">
+                          {t.description}
+                        </p>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => {
+                    setShowAiModal(false);
+                    setAiTasks([]);
+                  }}
+                  className="text-slate-500 px-4 py-2 hover:text-slate-700"
+                >
+                  Cancel
+                </button>
+                {aiTasks.length > 0 && (
+                  <button
+                    onClick={addSelectedAiTasks}
+                    className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 font-medium"
+                  >
+                    Add Selected to Board
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-slate-100 rounded-xl p-4">

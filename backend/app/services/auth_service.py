@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.schemas.user import UserCreate
-from app.core.security import create_access_token
+from app.core.security import create_access_token, create_reset_token, verify_reset_token
+from app.utils.email import send_reset_email
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -33,3 +34,21 @@ def login_user(db: Session, email: str, password: str):
         return None
     token = create_access_token({"sub": user.email})
     return token
+
+def request_password_reset(db: Session, email: str):
+    user = db.query(User).filter(User.email == email).first()
+    if user:
+        token = create_reset_token(email)
+        send_reset_email(email, token)
+    # Always succeed silently even if email not found, to avoid leaking which emails are registered
+
+def reset_password(db: Session, token: str, new_password: str):
+    email = verify_reset_token(token)
+    if not email:
+        return False
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        return False
+    user.password = hash_password(new_password)
+    db.commit()
+    return True
