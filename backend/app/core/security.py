@@ -21,3 +21,17 @@ def verify_token(token: str):
         return payload
     except JWTError:
         return None
+
+def create_reset_token(email: str):
+    expire = datetime.utcnow() + timedelta(minutes=15)
+    to_encode = {"sub": email, "purpose": "reset", "exp": expire}
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+def verify_reset_token(token: str):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("purpose") != "reset":
+            return None
+        return payload.get("sub")
+    except JWTError:
+        return None

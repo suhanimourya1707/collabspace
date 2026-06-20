@@ -37,6 +37,14 @@ function LoginPage() {
           placeholder="Password"
           className="w-full border p-3 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+        <p className="text-right mb-4 -mt-2">
+          <Link
+            to="/forgot-password"
+            className="text-sm text-blue-600 hover:underline"
+          >
+            Forgot password?
+          </Link>
+        </p>
         <button
           onClick={handleLogin}
           className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold"

@@ -6,6 +6,8 @@ import DashboardPage from "../pages/DashboardPage";
 import RegisterPage from "../pages/RegisterPage";
 import KanbanPage from "../pages/KanbanPage";
 import DocumentsPage from "../pages/DocumentsPage";
+import ForgotPasswordPage from "../pages/ForgotPasswordPage";
+import ResetPasswordPage from "../pages/ResetPasswordPage";
 function AppRouter() {
   return (
     <BrowserRouter>
@@ -17,6 +19,8 @@ function AppRouter() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/kanban/:workspaceId" element={<KanbanPage />} />
         <Route path="/documents" element={<DocumentsPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
       </Routes>
     </BrowserRouter>
   );
