@@ -21,7 +21,8 @@ class GenerateResponse(BaseModel):
 def debug_env():
     import os
     key = os.getenv("GROQ_API_KEY")
-    return {"key_found": bool(key), "key_length": len(key) if key else 0}
+    matches = [k for k in os.environ.keys() if "groq" in k.lower()]
+    return {"key_found": bool(key), "key_length": len(key) if key else 0, "similar_keys": matches}
 
 @router.post("/generate-tasks", response_model=GenerateResponse)
 def generate(data: GenerateRequest, current_user: User = Depends(get_current_user)):
