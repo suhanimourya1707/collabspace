@@ -1,6 +1,6 @@
 import os
 import json
-import google.generativeai as genai
+from groq import Groq
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -16,23 +16,24 @@ Return ONLY valid JSON in this exact format, no markdown formatting, no explanat
 Generate between 3 and 8 tasks."""
 
 def generate_tasks(prompt_text: str):
-    api_key = os.getenv("GEMINI_API_KEY")
+    api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
-        raise RuntimeError("GEMINI_API_KEY is not set on the server")
-    genai.configure(api_key=api_key)
+        raise RuntimeError("GROQ_API_KEY is not set on the server")
 
-    model = genai.GenerativeModel("gemini-2.0-flash")
+    client = Groq(api_key=api_key)
     full_prompt = PROMPT_TEMPLATE.format(input_text=prompt_text)
+
     try:
-        response = model.generate_content(
-            full_prompt,
-            generation_config={"response_mime_type": "application/json"},
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "user", "content": full_prompt}],
+            response_format={"type": "json_object"},
         )
     except Exception as e:
-        raise RuntimeError(f"Gemini API call failed: {e}")
+        raise RuntimeError(f"Groq API call failed: {e}")
 
     try:
-        data = json.loads(response.text)
+        data = json.loads(response.choices[0].message.content)
         return data.get("tasks", [])
-    except (json.JSONDecodeError, AttributeError, ValueError) as e:
-        raise RuntimeError(f"Could not parse Gemini response: {e}")
+    except (json.JSONDecodeError, AttributeError, ValueError, IndexError) as e:
+        raise RuntimeError(f"Could not parse Groq response: {e}")
